@@ -6,7 +6,7 @@ import gst.python.gst_tf_detection as gst_tf_detection
 def test_tf_object_detection_model():
 
     config = {
-        "weights": "data/models/ssdlite_mobilenet_v2_coco_2018_05_09/frozen_inference_graph.pb"
+        "weights": "data/models/mymodel/frozen_inference_graph.pb"
     }
 
     with gst_tf_detection.TfObjectDetectionModel(**config) as model:
