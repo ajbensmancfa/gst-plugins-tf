@@ -1,6 +1,6 @@
 # move chosen model to correct file location
 rm -r /home/gst-plugins-tf/data/models/mymodel/
-cp -r /home/gst-plugins-tf/data/models/mymodel_$1/ /home/gst-plugins-tf/data/models/mymodel
+cp -r /home/gst-plugins-tf/data/models/mymodel_$1/ /home/gst-plugins-tf/data/models/mymodel/
 
 source venv/bin/activate
 export GST_PLUGIN_PATH=$GST_PLUGIN_PATH:$PWD/venv/lib/gstreamer-1.0/:$PWD/gst/
