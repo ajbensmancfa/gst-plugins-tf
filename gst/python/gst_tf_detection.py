@@ -340,6 +340,12 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
 
             Gst.debug(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
 
+            # AJ put this here. Testing writing results to text file
+            if np.random.random() < 0.2:
+                f = open("output.txt", "a")
+                f.writelines(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
+                f.close()
+
             # write objects to as Gst.Buffer's metadata
             # Explained: http://lifestyletransfer.com/how-to-add-metadata-to-gstreamer-buffer-in-python/
             gst_meta_write(buffer, objects)
