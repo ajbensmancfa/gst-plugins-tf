@@ -1,2 +1,2 @@
 echo "argument is $1"
-touch testfile.txt
+mv requirements.txt req.txt
