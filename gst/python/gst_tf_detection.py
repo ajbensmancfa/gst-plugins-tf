@@ -15,6 +15,9 @@ import tensorflow as tf
 import typing as typ
 import yaml
 import numpy as np
+import boto3
+import json
+
 
 from gstreamer import Gst, GObject, GstBase, GstVideo
 import gstreamer.utils as utils
@@ -324,6 +327,7 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
 
         self.model = None
         self.config = None
+        self.kinesis_client = boto3.client('kinesis')
 
     def do_transform_ip(self, buffer: Gst.Buffer) -> Gst.FlowReturn:
 
@@ -341,10 +345,23 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
             Gst.debug(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
 
             # AJ put this here. Testing writing results to text file
-            if np.random.random() < 0.2:
-                f = open("output.txt", "a")
-                f.writelines(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
-                f.close()
+            # if np.random.random() < 0.2:
+            #     f = open("output.txt", "a")
+            #     f.writelines(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
+            #     f.close()
+
+            # in case no one is in store right now (testing purposes)
+            objects.append({"param1": 23, "param2": 14})
+
+            # format for kinesis data stream
+            output_data = []
+            for object in objects: # each object is a dictionary
+                object['Frame ID'] = buffer.pts // buffer.duration
+                output_data.append({'Data': json.dumps(object), 'PartitionKey':'partition_key'})
+
+            # put data into kinesis stream
+            if len(output_data) > 0:
+                self.kinesis_client.put_records(StreamName='video-recognized-objects-stream', records=output_data)
 
             # write objects to as Gst.Buffer's metadata
             # Explained: http://lifestyletransfer.com/how-to-add-metadata-to-gstreamer-buffer-in-python/
