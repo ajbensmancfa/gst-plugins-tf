@@ -30,6 +30,7 @@ def _get_log_level() -> int:
 
 log = logging.getLogger('gst_python')
 log.setLevel(_get_log_level())
+kinesis_client = boto3.client('kinesis', 'us-east-1')
 
 
 def _is_gpu_available() -> bool:
@@ -349,9 +350,6 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
             #     f.writelines(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
             #     f.close()
 
-            # in case no one is in store right now (testing purposes)
-            objects.append({"param1": 23, "param2": 14})
-
             # format for kinesis data stream
             output_data = []
             for object in objects: # each object is a dictionary
@@ -360,7 +358,6 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
 
             # put data into kinesis stream
             if len(output_data) > 0:
-                kinesis_client = boto3.client('kinesis', 'us-east-1')
                 kinesis_client.put_records(StreamName='video-recognized-objects-stream', Records=output_data)
 
             # write objects to as Gst.Buffer's metadata
