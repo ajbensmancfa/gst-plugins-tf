@@ -360,8 +360,8 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
 
             # put data into kinesis stream
             if len(output_data) > 0:
-                kinesis_client = boto3.client('kinesis')
-                kinesis_client.put_records(StreamName='video-recognized-objects-stream', records=output_data)
+                kinesis_client = boto3.client('kinesis', 'us-east-1')
+                kinesis_client.put_records(StreamName='video-recognized-objects-stream', Records=output_data)
 
             # write objects to as Gst.Buffer's metadata
             # Explained: http://lifestyletransfer.com/how-to-add-metadata-to-gstreamer-buffer-in-python/
