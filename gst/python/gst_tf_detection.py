@@ -358,8 +358,11 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
 
             # put data into kinesis stream
             if len(output_data) > 0:
-                kinesis_client.put_records(StreamName='video-recognized-objects-stream', Records=output_data)
-
+                try:
+                    kinesis_client.put_records(StreamName='video-recognized-objects-stream', Records=output_data)
+                except: # without this except clause, video boxes won't show up in video
+                    print("Could not put records in data stream. This is likely because you are running locally")
+            
             # write objects to as Gst.Buffer's metadata
             # Explained: http://lifestyletransfer.com/how-to-add-metadata-to-gstreamer-buffer-in-python/
             gst_meta_write(buffer, objects)
