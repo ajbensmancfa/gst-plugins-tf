@@ -344,11 +344,6 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
 
             Gst.debug(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
 
-            # AJ put this here. Testing writing results to text file
-            # if np.random.random() < 0.2:
-            #     f = open("output.txt", "a")
-            #     f.writelines(f"Frame id ({buffer.pts // buffer.duration}). Detected {str(objects)}")
-            #     f.close()
 
             # format for kinesis data stream
             output_data = []
@@ -409,7 +404,7 @@ class GstTfDetectionPluginPy(GstBase.BaseTransform):
         if self.model:
             self.model.shutdown()
 
-        sGst.info(f"Destroyed {self}")
+        Gst.info(f"Destroyed {self}")
 
 
 # Required for registering plugin dynamically

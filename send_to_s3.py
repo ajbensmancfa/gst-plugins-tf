@@ -1,5 +1,4 @@
-import boto3
+import requests
 
-cli = boto3.client('s3')
-
-cli.upload_file("output.txt", "test-gstreamer-tensorflow-output", "OUTPUT.txt")
+resp = requests.get('https://raw.githubusercontent.com/cfacorp/helpdesk_incident_forecast_challenge/master/helpdesk_ticket_count.csv?token=AUKPE2QQRWDG6CSZA6CVT5LA4367M')
+print(resp.raw)
