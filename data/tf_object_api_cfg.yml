@@ -3,6 +3,6 @@ height: 300
 labels: data/mscoco_label_map.yml
 log_device_placemenent: false
 per_process_gpu_memory_fraction: 0.0
-threshold: 0.6
+threshold: 0.6 # must be this confident to output that it identified an object
 weights: data/models/mymodel/frozen_inference_graph.pb
 width: 300
